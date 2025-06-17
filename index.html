@@ -52,13 +52,13 @@
 </head>
 <body>
 
-  <div id="form-section">
+  <form id="form-section" action="https://formspree.io/f/xpwrlqog" method="POST" onsubmit="showWish(event)">
     <h1>🎈 Enter Your Details 🎂</h1>
-    <input type="text" id="name" placeholder="Your Name" required />
-    <input type="number" id="age" placeholder="Your Age" required />
+    <input type="text" name="name" id="name" placeholder="Your Name" required />
+    <input type="number" name="age" id="age" placeholder="Your Age" required />
     <br>
-    <button onclick="showWish()">Submit</button>
-  </div>
+    <button type="submit">Submit</button>
+  </form>
 
   <div id="wish-section">
     <h1 id="wish-message">🎉 Happy Birthday!</h1>
@@ -66,18 +66,24 @@
   </div>
 
   <script>
-    function showWish() {
+    function showWish(e) {
+      e.preventDefault(); // Prevent default form redirect
+
       const name = document.getElementById("name").value;
       const age = document.getElementById("age").value;
 
-      if (name && age) {
-        document.getElementById("form-section").style.display = "none";
-        document.getElementById("wish-section").style.display = "block";
-        document.getElementById("wish-message").innerText = `🎉 Happy Birthday, ${name}! 🎂`;
-        document.getElementById("wish-details").innerText = `Wow! You're ${age} years old today! Wishing you joy, love, and cake! 🎁🎈`;
-      } else {
-        alert("Please enter both name and age.");
-      }
+      // Show birthday wish
+      document.getElementById("form-section").style.display = "none";
+      document.getElementById("wish-section").style.display = "block";
+      document.getElementById("wish-message").innerText = `🎉 Happy Birthday, ${name}! 🎂`;
+      document.getElementById("wish-details").innerText = `You're now ${age} years old! Wishing you all the best! 🎁🎈`;
+
+      // Send the form data using fetch (so Formspree still receives it)
+      fetch("https://formspree.io/f/xpwrlqog", {
+        method: "POST",
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(e.target)
+      });
     }
   </script>
 
